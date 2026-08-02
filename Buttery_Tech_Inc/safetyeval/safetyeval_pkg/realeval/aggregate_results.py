@@ -11,8 +11,7 @@ print(f"Found {len(log_files)} run file(s): {', '.join(log_files)}")
 
 def load_logs_as_dataframe(paths: list[str]) -> pd.DataFrame:
     """
-    Loads and combines every run_*.jsonl file, not just the latest one. If the same (model_id, item_id) pair shows up in more than one file,
-    the newest timestamp wins and older duplicates are dropped.
+    deduplicates across log files (keeps most recent model_id + item_id pair); sorts by timestamp
     """
     frame = [pd.read_json(path, lines=True) for path in paths]
     combined = pd.concat(frame, ignore_index=True)
